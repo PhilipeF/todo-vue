@@ -5,7 +5,7 @@ const estado = reactive({
   filtro: "todas",
   tarefas: [
     {
-      titulo: "Estudar ECS6",
+      titulo: "Estudar ES6",
       finalizada: false,
     },
     {
@@ -30,26 +30,27 @@ const getTarefasFinalizadas = () => {
 const getTarefasFiltradas = () => {
   const { filtro } = estado;
 
-  switch (filtro) {
-    case "pendentes":
-      return getTarefasPendentes();
-
-    case "finalizadas":
-      return getTarefasFinalizadas();
-
-    default:
-      return estado.tarefas;
+  if (filtro === "pendentes") {
+    return getTarefasPendentes();
+  } else if (filtro === "finalizadas") {
+    return getTarefasFinalizadas();
+  } else {
+    return estado.tarefas;
   }
 };
+
+const cadastrarTarefa = () => {
+  
+}
 </script>
 
 <template>
   <div class="container">
     <header class="p-5 mt-4 mb-4 bg-light rounded-3">
       <h1>Minhas tarefas</h1>
-      <p>Você possuiu {{ getTarefasPendentes().length }} tarefas pendentes</p>
+      <p>Você possui {{ getTarefasPendentes().length }} tarefas pendentes</p>
     </header>
-    <form>
+    <form @submit="cadastrarTarefa">
       <div class="row">
         <div class="col">
           <input
@@ -74,7 +75,11 @@ const getTarefasFiltradas = () => {
       </div>
     </form>
     <ul class="list-group mt-4">
-      <li class="list-group-item" v-for="tarefa in getTarefasFiltradas()">
+      <li
+        class="list-group-item"
+        v-for="tarefa in getTarefasFiltradas()"
+        :key="tarefa.titulo"
+      >
         <input
           @change="(evento) => (tarefa.finalizada = evento.target.checked)"
           type="checkbox"
